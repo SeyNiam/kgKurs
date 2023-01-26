@@ -6,7 +6,6 @@
 class Surface {
 public:
     char* name;
-    //bool isVisible;
     COLORREF colour;
 
     Surface(char* nam, COLORREF col);
