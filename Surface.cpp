@@ -2,6 +2,6 @@
 
 Surface::Surface(char* nam, COLORREF col) {
     name = nam;
-    isVisible = true;
+    //isVisible = true;
     colour = col;
 }

@@ -1,30 +1,19 @@
 #pragma once
 #include "Point.h"
 #include "Surface.h"
+#include "Colours.h"
 #include "graphics.h"
 #pragma comment(lib,"graphics.lib")
 
-#define P 3.14
-#define TEXTCOL 13 // маджента
-#define MAINCOL 13 
-#define WHITE 15
-#define BLACK 0
-
-#define GREEN 2
-#define CYAN 11
-#define RED	4
-#define YELLOW	14
 
 // класс фигуры
 class Piramid {
 public:
-    Point A, B, C, D;
-    char name_A[2] = "A";
-    char name_B[2] = "B";
-    char name_C[2] = "C";
-    char name_D[2] = "D";
+    Point A, B, C, D, E, F, G, H, I;
+
     int col = MAINCOL;
 
+    // грани трёхгранной
     char name_ABC[4] = "ABC";
     char name_ADC[4] = "ADC";
     char name_ABD[4] = "ABD";
@@ -34,8 +23,20 @@ public:
     Surface ABD = Surface(name_ABD, CYAN);
     Surface BCD = Surface(name_BCD, YELLOW);
 
-    // конструктор от 4 точек
-    Piramid(Point One, Point Two, Point Three, Point Four);
+    // грани четырёхгранной
+    char name_EFGH[5] = "EFGH";
+    char name_EFI[4] = "EFI";
+    char name_FGI[4] = "FGI";
+    char name_GHI[4] = "GHI";
+    char name_EHI[4] = "EHI";
+    Surface EFGH = Surface(name_EFGH, RED);
+    Surface EFI = Surface(name_EFI, GREEN);
+    Surface FGI = Surface(name_FGI, CYAN);
+    Surface GHI = Surface(name_GHI, YELLOW);
+    Surface EHI = Surface(name_EHI, WHITE);
+
+    // конструктор от 9 точек для двух фигур сразу
+    Piramid(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine);
 
     // отрисовка
     void drawPiramid();
@@ -65,7 +66,7 @@ public:
     // масштабирование всей фигуры
     void scale(float e);
 
-
+    /*
     Point dot;  // точка пересечения
     // проверка на пересечение линий
     bool cross(Point a1, Point a2, Point a3, Point a4);
@@ -78,9 +79,35 @@ public:
 
     // заливка одной поверхности
     void fill(Point p1, Point p2, Point p3, COLORREF col);
-
+*/
     // закраска всех видимых поверхностей
-    void colouring();
+    //void colouring();
+
+
+
+    //float MAXDIST = 1000.0; //Максимальная глубина сцены
+    //float MAXYLINES = 200; //Максимальное количество линий в сцене.
+    //float clBk = 3; //Цвет по умолчанию
+
+    //typedef struct Cell CELL; //Структура ячейки, из которых будет состоять Z-буфер.
+    
+
+    const int width = 1400;
+    const int height = 700;
+    const int depth = 255;
+
+    int minInt = -32767;
+
+    int* zbuffer = NULL;
+
+    // закраска пиксела
+    void imgCol(int Px, int Py, int Pz, COLORREF colour);
+
+    // закраска треугольника
+    void triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer);
+
+    // z-buffer
+    void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine, COLORREF colour);
 
 
 };

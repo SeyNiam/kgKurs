@@ -145,6 +145,7 @@
     <ClCompile Include="Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Colours.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="Piramid.h" />
     <ClInclude Include="Point.h" />

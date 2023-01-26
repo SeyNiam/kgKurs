@@ -7,17 +7,7 @@
 #include "Point.h"
 #include "Surface.h"
 #include "Piramid.h"
-
-#define P 3.14
-#define TEXTCOL 13 // маджента
-#define MAINCOL 13 
-#define WHITE 15
-#define BLACK 0
-
-#define GREEN 2
-#define CYAN 11
-#define RED	4
-#define YELLOW	14
+#include "Colours.h"
 
 using namespace std;
 
@@ -67,24 +57,44 @@ void line_DDA(float x1, float y1, float z1, float x2, float y2, float z2, COLORR
 }
 
 
+// имена точек
+char name_A[2] = "A";
+char name_B[2] = "B";
+char name_C[2] = "C";
+char name_D[2] = "D";
 
-// конструктор от 4 точек
-Piramid::Piramid(Point One, Point Two, Point Three, Point Four) {
+char name_E[2] = "E";
+char name_F[2] = "F";
+char name_G[2] = "G";
+char name_H[2] = "H";
+char name_I[2] = "I";
+
+
+// конструктор от 9 точек сразу для двух фигур
+Piramid::Piramid(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine) {
     A.x = One.x; A.y = One.y; A.z = One.z; A.name = name_A;
     B.x = Two.x; B.y = Two.y; B.z = Two.z; B.name = name_B;
     C.x = Three.x; C.y = Three.y; C.z = Three.z; C.name = name_C;
     D.x = Four.x; D.y = Four.y; D.z = Four.z; D.name = name_D;
+
+    E.x = Five.x; E.y = Five.y; E.z = Five.z; E.name = name_E;
+    F.x = Six.x; F.y = Six.y; F.z = Six.z; F.name = name_F;
+    G.x = Seven.x; G.y = Seven.y; G.z = Seven.z; G.name = name_G;
+    H.x = Eight.x; H.y = Eight.y; H.z = Eight.z; H.name = name_H;
+    I.x = Nine.x; I.y = Nine.y; I.z = Nine.z; I.name = name_I;
     drawPiramid();
 }
+
 
 // отрисовка
 void Piramid::drawPiramid() {
     // оси
     setcolor(WHITE);
-    line(700, 350, 730, 350);
-    line(700, 350, 700, 320);
-    line(700, 350, 685, 365);
+    line(700, 350, 730, 350); char xCoord[2] = "x"; outtextxy(735, 350, xCoord);
+    line(700, 350, 700, 320); char yCoord[2] = "y"; outtextxy(700, 300, yCoord);
+    line(700, 350, 685, 365); char zCoord[2] = "z"; outtextxy(680, 370, zCoord);
 
+    // инструкции
     char w[20] = "W - Up";
     char a[20] = "A - Left";
     char s[20] = "S - Down";
@@ -117,6 +127,13 @@ void Piramid::drawPiramid() {
     C.namePoint(C.name);
     D.namePoint(D.name);
 
+    E.namePoint(E.name);
+    F.namePoint(F.name);
+    G.namePoint(G.name);
+    H.namePoint(H.name);
+    I.namePoint(I.name);
+
+    // трёхгранная
     // нижнее основание
     line_DDA(A.x, A.y, A.z, B.x, B.y, B.z, col); // линия 1
     line_DDA(B.x, B.y, B.z, C.x, C.y, C.z, col); // линия 2
@@ -127,8 +144,27 @@ void Piramid::drawPiramid() {
     line_DDA(D.x, D.y, D.z, B.x, B.y, B.z, col); // линия 5
     line_DDA(D.x, D.y, D.z, C.x, C.y, C.z, col); // линия 6
 
+
+    // четырёхгранная
+    // нижнее основание
+    line_DDA(E.x, E.y, E.z, F.x, F.y, F.z, col); // линия 1
+    line_DDA(F.x, F.y, F.z, G.x, G.y, G.z, col); // линия 2
+    line_DDA(G.x, G.y, G.z, H.x, H.y, H.z, col); // линия 3
+    line_DDA(H.x, H.y, H.z, E.x, E.y, E.z, col); // линия 4
+
+    // боковые грани
+    line_DDA(I.x, I.y, I.z, E.x, E.y, E.z, col); // линия 5
+    line_DDA(I.x, I.y, I.z, F.x, F.y, F.z, col); // линия 6
+    line_DDA(I.x, I.y, I.z, G.x, G.y, G.z, col); // линия 7
+    line_DDA(I.x, I.y, I.z, H.x, H.y, H.z, col); // линия 8
+
+
+
     // закраска граней фигуры
-    colouring();
+   // colouring();
+
+
+    zBuff(A, B, C, D, E, F, G, H, I, RED);
 
 }
 
@@ -138,18 +174,36 @@ void Piramid::moveX(float amt) {
     B.x += amt;
     C.x += amt;
     D.x += amt;
+
+    E.x += amt;
+    F.x += amt;
+    G.x += amt;
+    H.x += amt;
+    I.x += amt;
 }
 void Piramid::moveY(float amt) {
     A.y += amt;
     B.y += amt;
     C.y += amt;
     D.y += amt;
+
+    E.y += amt;
+    F.y += amt;
+    G.y += amt;
+    H.y += amt;
+    I.y += amt;
 }
 void Piramid::moveZ(float amt) {
     A.z += amt;
     B.z += amt;
     C.z += amt;
     D.z += amt;
+
+    E.z += amt;
+    F.z += amt;
+    G.z += amt;
+    H.z += amt;
+    I.z += amt;
 }
 
 // поворот одной точки вокруг z
@@ -169,14 +223,20 @@ void Piramid::rotateZ(int u) { // u = -1 по часовой, u = 1 против
     float ang = u * 0.05; // угол поворота
 
     Point Cen; // точка центра 
-    Cen.x = (A.x + B.x + C.x + D.x) / 4;
-    Cen.y = (A.y + B.y + C.y + D.y) / 4;
-    Cen.z = (A.z + B.z + C.z + D.z) / 4;
+    Cen.x = (A.x + B.x + C.x + D.x + E.x + F.x + G.x + H.x + I.x) / 9;
+    Cen.y = (A.y + B.y + C.y + D.y + E.y + F.y + G.y + H.y + I.y) / 9;
+    Cen.z = (A.z + B.z + C.z + D.z + E.z + F.z + G.z + H.z + I.z) / 9;
 
     A = rotDotZ(u, ang, Cen, A);
     B = rotDotZ(u, ang, Cen, B);
     C = rotDotZ(u, ang, Cen, C);
     D = rotDotZ(u, ang, Cen, D);
+
+    E = rotDotZ(u, ang, Cen, E);
+    F = rotDotZ(u, ang, Cen, F);
+    G = rotDotZ(u, ang, Cen, G);
+    H = rotDotZ(u, ang, Cen, H);
+    I = rotDotZ(u, ang, Cen, I);
 }
 
 // поворот одной точки вокруг y
@@ -196,14 +256,20 @@ void Piramid::rotateY(int u) { // u = -1 по часовой, u = 1 против
     float ang = u * 0.05; // угол поворота
 
     Point Cen; // точка центра 
-    Cen.x = (A.x + B.x + C.x + D.x) / 4;
-    Cen.y = (A.y + B.y + C.y + D.y) / 4;
-    Cen.z = (A.z + B.z + C.z + D.z) / 4;
+    Cen.x = (A.x + B.x + C.x + D.x + E.x + F.x + G.x + H.x + I.x) / 9;
+    Cen.y = (A.y + B.y + C.y + D.y + E.y + F.y + G.y + H.y + I.y) / 9;
+    Cen.z = (A.z + B.z + C.z + D.z + E.z + F.z + G.z + H.z + I.z) / 9;
 
     A = rotDotY(u, ang, Cen, A);
     B = rotDotY(u, ang, Cen, B);
     C = rotDotY(u, ang, Cen, C);
     D = rotDotY(u, ang, Cen, D);
+
+    E = rotDotY(u, ang, Cen, E);
+    F = rotDotY(u, ang, Cen, F);
+    G = rotDotY(u, ang, Cen, G);
+    H = rotDotY(u, ang, Cen, H);
+    I = rotDotY(u, ang, Cen, I);
 }
 
 // поворот одной точки вокруг x
@@ -223,14 +289,20 @@ void Piramid::rotateX(int u) { // u = -1 по часовой, u = 1 против
     float ang = u * 0.05; // угол поворота
 
     Point Cen; // точка центра
-    Cen.x = (A.x + B.x + C.x + D.x) / 4;
-    Cen.y = (A.y + B.y + C.y + D.y) / 4;
-    Cen.z = (A.z + B.z + C.z + D.z) / 4;
+    Cen.x = (A.x + B.x + C.x + D.x + E.x + F.x + G.x + H.x + I.x) / 9;
+    Cen.y = (A.y + B.y + C.y + D.y + E.y + F.y + G.y + H.y + I.y) / 9;
+    Cen.z = (A.z + B.z + C.z + D.z + E.z + F.z + G.z + H.z + I.z) / 9;
 
     A = rotDotX(u, ang, Cen, A);
     B = rotDotX(u, ang, Cen, B);
     C = rotDotX(u, ang, Cen, C);
     D = rotDotX(u, ang, Cen, D);
+
+    E = rotDotX(u, ang, Cen, E);
+    F = rotDotX(u, ang, Cen, F);
+    G = rotDotX(u, ang, Cen, G);
+    H = rotDotX(u, ang, Cen, H);
+    I = rotDotX(u, ang, Cen, I);
 }
 
 // масштабирование одной точки
@@ -256,25 +328,43 @@ Point Piramid::dotScale(float e, Point Cen, Point L) {
 // масштабирование всей фигуры
 void Piramid::scale(float e) {
     Point Cen; // точка центра 
-    Cen.x = (A.x + B.x + C.x + D.x) / 4;
-    Cen.y = (A.y + B.y + C.y + D.y) / 4;
-    Cen.z = (A.z + B.z + C.z + D.z) / 4;
+    Cen.x = (A.x + B.x + C.x + D.x + E.x + F.x + G.x + H.x + I.x) / 9;
+    Cen.y = (A.y + B.y + C.y + D.y + E.y + F.y + G.y + H.y + I.y) / 9;
+    Cen.z = (A.z + B.z + C.z + D.z + E.z + F.z + G.z + H.z + I.z) / 9;
 
-    if (((abs(A.x - Cen.x) >= 1 && abs(A.y - Cen.y) >= 1 && abs(A.z - Cen.z) >= 1) &&
-        (abs(B.x - Cen.x) >= 1 && abs(B.y - Cen.y) >= 1 && abs(B.z - Cen.z) >= 1) &&
-        (abs(C.x - Cen.x) >= 1 && abs(C.y - Cen.y) >= 1 && abs(C.z - Cen.z) >= 1) &&
-        (abs(D.x - Cen.x) >= 1 && abs(D.y - Cen.y) >= 1 && abs(D.z - Cen.z) >= 1)
-        ) || e > 1) { // предотвращение сжатия в точку
+    if (((abs(A.x - Cen.x) >= 0.1 && abs(A.y - Cen.y) >= 0.1 && abs(A.z - Cen.z) >= 0.1) &&
+        (abs(B.x - Cen.x) >= 0.1 && abs(B.y - Cen.y) >= 0.1 && abs(B.z - Cen.z) >= 0.1) &&
+        (abs(C.x - Cen.x) >= 0.1 && abs(C.y - Cen.y) >= 0.1 && abs(C.z - Cen.z) >= 0.1) &&
+        (abs(D.x - Cen.x) >= 0.1 && abs(D.y - Cen.y) >= 0.1 && abs(D.z - Cen.z) >= 0.1) &&
+        (abs(E.x - Cen.x) >= 0.1 && abs(E.y - Cen.y) >= 0.1 && abs(E.z - Cen.z) >= 0.1) &&
+        (abs(F.x - Cen.x) >= 0.1 && abs(F.y - Cen.y) >= 0.1 && abs(F.z - Cen.z) >= 0.1) &&
+        (abs(G.x - Cen.x) >= 0.1 && abs(G.y - Cen.y) >= 0.1 && abs(G.z - Cen.z) >= 0.1) &&
+        (abs(H.x - Cen.x) >= 0.1 && abs(H.y - Cen.y) >= 0.1 && abs(H.z - Cen.z) >= 0.1) &&
+        (abs(I.x - Cen.x) >= 0.1 && abs(I.y - Cen.y) >= 0.1 && abs(I.z - Cen.z) >= 0.1)
+        ) && e < 1 || e > 1) { // предотвращение сжатия в точку
 
         A = dotScale(e, Cen, A);
         B = dotScale(e, Cen, B);
         C = dotScale(e, Cen, C);
         D = dotScale(e, Cen, D);
+
+        E = dotScale(e, Cen, E);
+        F = dotScale(e, Cen, F);
+        G = dotScale(e, Cen, G);
+        H = dotScale(e, Cen, H);
+        I = dotScale(e, Cen, I);
     }
 
 }
 
 
+
+
+
+
+
+
+/*
 // проверка на пересечение линий
 bool Piramid::cross(Point a1, Point a2, Point a3, Point a4) {
     Point p1 = a1, p2 = a2, p3 = a3, p4 = a4;
@@ -533,7 +623,19 @@ void Piramid::seenS(Point a1, Point a2, Point a3, Point a4) {
     }
 
 }
+*/
 
+void Piramid::imgCol(int Px, int Py, int Pz, COLORREF colour) {
+    // учёт координаты z при отрисовке в двумерном пространстве
+    // точка пересечения смотрится не прямо вдоль оси z, а под углом 45, как видит пользователь
+    Px -= 0.5 * Pz;
+    Py += 0.5 * Pz;
+
+    putpixel(Px, Py, colour);
+}
+
+
+/*
 // заливка одной поверхности
 void Piramid::fill(Point p1, Point p2, Point p3, COLORREF col) {
     // учёт координаты z при отрисовке в двумерном пространстве
@@ -577,8 +679,9 @@ void Piramid::fill(Point p1, Point p2, Point p3, COLORREF col) {
         line(y_const[0], y_const[1], y_const[2], y_const[3]);
     }
 }
-
+*/
 // закраска всех видимых поверхностей
+/*
 void Piramid::colouring() {
     int abcd = seenL(A, B, C, D);
     int acbd = seenL(A, C, B, D);
@@ -606,5 +709,244 @@ void Piramid::colouring() {
         cout << "\n\tBCD is visible\n";
         fill(B, C, D, BCD.colour);
     }
+
+}
+*/
+
+
+
+// z-buffer
+/*
+void zBuff() {
+    //Основной процесс алгоритма буфера глубины (псевдокод)
+    //    for(each face F) //для каждой грани F
+    //     for (each pixel(x,y) covering the face) //для каждого пиксела (x,y) покрывающего грань
+    //        {depth = depth of F at (x,y);//глубина F в (x,y)
+    //     if (depth < d[x][y]) //если F ближайшая грань
+    //        {C = color of F at (x,y); //цвет грани F в т.(x,y)
+    //     //set the pixel color at (x,y) to C
+    //     //устанавливаем цвет пиксела в (x,y) равным C
+    //     d[x][y] = depth; //обновляем буфер глубины}}
+
+
+
+
+
+
+
+
+
+
+
+
+    // пробуем https://rudocs.exdat.com/docs/index-538930.html
+    
+    // Инициализация Z - буфера и буфера регенерации(буфера кадра):
+    const int x = 1, y = 1;
+    float depth[x][y] = { 1 }; //значение глубины
+    int background = 0;
+    int refresh[x][y] = { background }; //в буфер заносится значение фона
+
+
+
+
+
+
+
+
+
+
+    // фигня непонятная http://www.opita.net/node/58
+    
+    //#define MAXDIST 1000.0 //Максимальная глубина сцены
+    //#define MAXYLINES 200 //Максимальное количество линий в сцене.
+    //#define clBk 3; //Цвет по умолчанию
+    //
+    //typedef struct Cell CELL; //Структура ячейки, из которых будет состоять Z-буфер.
+    //struct Cell {
+    //    double z;
+    //    int color;
+    //};
+    //
+    ////Класс Z-буфера.
+    //class ZBuffer {
+    //public:
+    //    CELL* buff[MAXYLINES];
+    //    int sX, sY;	// Размер Z-Буфера
+    //
+    //    ZBuffer(int ax, int ay) {
+    //        sX = ax; sY = ay;
+    //        for (int i = 0; i < sY; i++) {
+    //            //Выделение памяти под ячейки
+    //            buff[i] = (struct Cell*)malloc(sX * sizeof(struct Cell));
+    //        }
+    //    }
+    //
+    //    ~ZBuffer() {
+    //        for (int i = 0; i < sY; i++)
+    //            free(buff[i]); //Освобождение памяти
+    //    }
+    //
+    //    void PutTriangle(Triangle& t) {
+    //        int ymax, ymin, ysc, e1, e, i;
+    //        int x[3], y[3];
+    //        //Заносим x,y из t в массивы для последующей работы с ними
+    //        for (i = 0; i < 3; i++)
+    //            x[i] = int(t.p[i].x), y[i] = int(t.p[i].y);
+    //        //Определяем максимальный и минимальный y
+    //        ymax = ymin = y[0];
+    //        if (ymax < y[1]) ymax = y[1]; else if (ymin > y[1]) ymin = y[1];
+    //        if (ymax < y[2]) ymax = y[2]; else if (ymin > y[2]) ymin = y[2];
+    //        ymin = (ymin < 0) ? 0 : ymin;
+    //        ymax = (ymax < sY) ? ymax : sY;
+    //        int ne;
+    //        int x1, x2, xsc1, xsc2;
+    //        double z1, z2, tc, z;
+    //        //Следующий участок кода перебирает все строки сцены
+    //        //и определяет глубину каждого пикселя
+    //        //для соответствующего треугольника
+    //        for (ysc = ymin; ysc < ymax; ysc++) {
+    //            ne = 0;
+    //            for (int e = 0; e < 3; e++) {
+    //                e1 = e + 1;
+    //                if (e1 == 3) e1 = 0;
+    //                if (y[e] < y[e1]) {
+    //                    if (y[e1] <= ysc || ysc < y[e]) continue;
+    //                }
+    //                else if (y[e] > y[e1]) {
+    //                    if (y[e1] > ysc || ysc >= y[e]) continue;
+    //                }
+    //                else continue;
+    //                tc = double(y[e] - ysc) / (y[e] - y[e1]);
+    //                if (ne)
+    //                    x2 = x[e] + int(tc * (x[e1] - x[e])),
+    //                    z2 = t.p[e].z + tc * (t.p[e1].z - t.p[e].z);
+    //                else
+    //                    x1 = x[e] + int(tc * (x[e1] - x[e])),
+    //                    z1 = t.p[e].z + tc * (t.p[e1].z - t.p[e].z),
+    //                    ne = 1;
+    //            }
+    //            if (x2 < x1) e = x1, x1 = x2, x2 = e, tc = z1, z1 = z2, z2 = tc;
+    //            xsc1 = (x1 < 0) ? 0 : x1;
+    //            xsc2 = (x2 < sX) ? x2 : sX;
+    //            for (int xsc = xsc1; xsc < xsc2; xsc++) {
+    //                tc = double(x1 - xsc) / (x1 - x2);
+    //                z = z1 + tc * (z2 - z1);
+    //                //Если полученная глубина пиксела меньше той,
+    //                //что находится в Z-Буфере - заменяем храняшуюся на новую.
+    //                if (z < (*(buff[ysc] + xsc)).z)
+    //                    (*(buff[ysc] + xsc)).color = t.color,
+    //                    (*(buff[ysc] + xsc)).z = z;
+    //            }
+    //        }
+    //    }
+    //    
+    //    //Функция, выводящая на экран содержимое заполненного Z-буфера.
+    //    void Show() {
+    //        for (int j = 0; j < sY; j++)
+    //            for (int i = 0; i < sX; i++)
+    //                //Выводим пиксели на экран
+    //                Form1->Canvas->Pixels[50 + i][j] = clBlue / (*(buff[j] + i)).color;
+    //    }
+    //
+    //    //Функция, 'очищающая' Z-буфер.
+    //    void Clear() { 
+    //        for (int j = 0; j < sY; j++)
+    //            for (int i = 0; i < sX; i++)
+    //                //Инициализируем ячейки Z-буфера
+    //                (*(buff[j] + i)).z = MAXDIST, (*(buff[j] + i)).color = clBk;
+    //    }
+    //};
+
+
+}
+*/
+
+
+// закраска треугольниками
+void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer) {
+    if (t0.y == t1.y && t0.y == t2.y) return; // i dont care about degenerate triangles
+    if (t0.y > t1.y) std::swap(t0, t1);
+    if (t0.y > t2.y) std::swap(t0, t2);
+    if (t1.y > t2.y) std::swap(t1, t2);
+    int total_height = t2.y - t0.y;
+
+
+
+
+    //t0.x -= 0.5 * t0.z; t0.y += 0.5 * t0.z;
+    //t1.x -= 0.5 * t1.z; t1.y += 0.5 * t1.z;
+    //t2.x -= 0.5 * t2.z; t2.y += 0.5 * t2.z;
+
+
+
+
+    for (int i = 0; i < total_height; i++) {
+        bool second_half = i > t1.y - t0.y || t1.y == t0.y;
+        int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
+        float alpha = (float)i / total_height;
+        float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height; // be careful: with above conditions no division by zero here
+        Point A = t0 + Point(t2 - t0) * alpha;
+        Point B = second_half ? t1 + Point(t2 - t1) * beta : t0 + Point(t1 - t0) * beta;
+        if (A.x > B.x) 
+            std::swap(A, B);
+
+        for (int j = A.x; j <= B.x; j++) {
+            float phi = B.x == A.x ? 1. : (float)(j - A.x) / (float)(B.x - A.x);
+            Point P = Point(A) + Point(B - A) * phi;
+            int idx = P.x + P.y * width;
+
+            if (zbuffer[idx] < P.z) {
+                zbuffer[idx] = P.z;
+                // image.set(P.x, P.y, colour); вывод по координатам точки на экран цвета, нафиг пока
+                // fixit с затравкой это короче красим сначала проверяя принадлежит ли пиксел нашей нужной области, которую мы красим или типо того
+                // мне ещё надо делать поправку по z при закраске, но это где-то уже лежит написанное
+                
+                imgCol(P.x, P.y, P.z, colour);
+                //putpixel(P.x, P.y, colour);
+
+
+                //P.x = j; P.y = t0.y + i; // a hack to fill holes (due to int cast precision problems)
+                //imgCol(P.x, P.y, P.z, colour);
+            }
+                        
+        }
+    }
+}
+
+void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I, COLORREF colour) {
+    
+    zbuffer = new int[width * height]; // создание z-буффера
+    for (int i = 0; i < width * height; i++) {
+        zbuffer[i] = minInt; // по всему экрану задаём ему минимальнейшее значение -- фон
+    }
+
+    // добавление треугольников в буфер и их закраска!!!!!!!!!
+    // fixit это говно находит что ближе, ок да, прекрасно, но оно и красит сразу же, а нафиг мне красить то, что не видно???
+    /*
+    triangle(A, B, C, RED, zbuffer); // основание
+    triangle(A, C, D, GREEN, zbuffer);
+    triangle(B, C, D, CYAN, zbuffer);
+    triangle(A, B, D, YELLOW, zbuffer);
+       
+    triangle(E, F, G, RED, zbuffer); // основание
+    triangle(F, G, H, RED, zbuffer); // основание
+    triangle(E, F, I, GREEN, zbuffer);
+    triangle(F, G, I, CYAN, zbuffer);
+    triangle(G, H, I, YELLOW, zbuffer);
+    triangle(H, E, I, MAGENTA, zbuffer);
+    */
+
+    triangle(A, B, C, RED, zbuffer); // основание
+    triangle(A, C, D, RED, zbuffer);
+    triangle(B, C, D, RED, zbuffer);
+    triangle(A, B, D, RED, zbuffer);
+
+    triangle(E, F, G, GREEN, zbuffer); // основание
+    triangle(F, G, H, GREEN, zbuffer); // основание
+    triangle(E, F, I, GREEN, zbuffer);
+    triangle(F, G, I, GREEN, zbuffer);
+    triangle(G, H, I, GREEN, zbuffer);
+    triangle(H, E, I, GREEN, zbuffer);
 
 }
