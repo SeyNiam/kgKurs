@@ -107,7 +107,7 @@ public:
     void triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer);
 
     // z-buffer
-    void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine, COLORREF colour);
+    void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine);
 
 
 };

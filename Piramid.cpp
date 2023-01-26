@@ -164,7 +164,7 @@ void Piramid::drawPiramid() {
    // colouring();
 
 
-    zBuff(A, B, C, D, E, F, G, H, I, RED);
+    zBuff(A, B, C, D, E, F, G, H, I);
 
 }
 
