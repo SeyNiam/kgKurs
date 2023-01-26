@@ -24,7 +24,6 @@ Point::Point(float px, float py, float pz, char* pname) {
     name = pname;
 }
 
-
 Point operator - (Point p1, Point p2) {
     Point p3;
     p3.x = p1.x - p2.x;
