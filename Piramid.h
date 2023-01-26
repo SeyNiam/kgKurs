@@ -100,11 +100,11 @@ public:
 
     int* zbuffer = NULL;
 
-    // закраска пиксела
+    // закраска пиксела fixit no need????
     void imgCol(int Px, int Py, int Pz, COLORREF colour);
 
     // закраска треугольника
-    void triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer);
+    void triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer/*, bool doCol*/);
 
     // z-buffer
     void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine);
