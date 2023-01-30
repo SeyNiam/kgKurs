@@ -849,39 +849,53 @@ void zBuff() {
 // todo разобраться где что-то идёт не так, почему оно красит художником
 
 // закраска треугольниками
-void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuffer/*, bool doCol*/) {
+void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbuffer, bool doCol*/) {
     // учёт координаты z при отрисовке в двумерном пространстве
     // точка пересечения смотрится не прямо вдоль оси z, а под углом 45, как видит пользователь
     t0.x -= 0.5 * t0.z; t0.y += 0.5 * t0.z;
     t1.x -= 0.5 * t1.z; t1.y += 0.5 * t1.z;
     t2.x -= 0.5 * t2.z; t2.y += 0.5 * t2.z; 
 
-
-    if (t0.y == t1.y && t0.y == t2.y) return; // i dont care about degenerate triangles
+    // сортировка точек по координате у
+    if (t0.y == t1.y && t0.y == t2.y) return; // если все точки совпали по у, возврат
     if (t0.y > t1.y) std::swap(t0, t1);
     if (t0.y > t2.y) std::swap(t0, t2);
     if (t1.y > t2.y) std::swap(t1, t2);
-    int total_height = t2.y - t0.y;
+    int total_height = t2.y - t0.y; // высота закрашиваемого треугольника
 
-    for (int i = 0; i < total_height; i++) {
-        bool second_half = i > t1.y - t0.y || t1.y == t0.y;
-        int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
+
+    // todo fixit где-то с этого момента у чела есть объяснение что тут происходит
+
+
+    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника??????????? fixit 4real?
+        bool second_half = i > t1.y - t0.y || t1.y == t0.y; // true или false в зависимости от того 
+                                                            // больше ли i , чем расстояние между 1 и 0 точками или
+                                                            // они совпали
+        int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y; // если i больше, чем расстояние между 1 и 0 точками, то
+                                                            // оно равно расстоянию между 2 и 1 точками, иначе
+                                                            // между 1 и 0 точками
         float alpha = (float)i / total_height;
-        float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height; // be careful: with above conditions no division by zero here
+        float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height; // be careful: with above conditions no division by zero here fixit 4real
+        
         Point A = t0 + Point(t2 - t0) * alpha;
         Point B = second_half ? t1 + Point(t2 - t1) * beta : t0 + Point(t1 - t0) * beta;
-        if (A.x > B.x) std::swap(A, B);
+        
+        if (A.x > B.x) std::swap(A, B); // сортировка точек по координате х
 
-        for (int j = A.x; j <= B.x; j++) {
-            float phi = B.x == A.x ? 1. : (float)(j - A.x) / (float)(B.x - A.x);
+        for (int j = A.x; j <= B.x; j++) { // проход по строке с коорд х от а до б
+            float phi = B.x == A.x ? 1.0 : (float)(j - A.x) / (float)(B.x - A.x); // 4real what
             Point P = Point(A) + Point(B - A) * phi;
-            int idx = P.x + P.y * width;
+
+            int idx = P.x + P.y *width; // возможно что-то тут не так смотрим????????????
 
             if (zbuffer[idx] < P.z /* && doCol*/) {
-                zbuffer[idx] = P.z;
+
+                //cout << "zbuffer[idx] < P.z\t zbuffer[idx] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is closer" << endl;
+
+                zbuffer[idx] = P.z; // по какой-то причине оно записывается в буфер, но потом его там нет, там снова минимум
                 
                 //imgCol(P.x, P.y, P.z, colour); // с поправками уже не надо ?? fixit
-                putpixel(P.x, P.y, colour); 
+                putpixel(P.x, P.y, colour); // colour+j gives cool gradient to black
 
                 // todo fixit почему-то не видит что ближе к экрану и красит по художнику
 
@@ -889,8 +903,8 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuff
                 //P.x = j; P.y = t0.y + i; // a hack to fill holes (due to int cast precision problems)
                 //imgCol(P.x, P.y, P.z, colour);
             }
-            else {
-                //cout << zbuffer[idx] << " " << P.z << endl;
+            else if (zbuffer[idx] > P.z){
+                //cout << "zbuffer[idx] > P.z\t zbuffer[idx] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is NOT closer" << endl;
             }
                         
         }
@@ -908,15 +922,18 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int* zbuff
 
 }
 
+
+
+
 void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {
     
-    zbuffer = new int[width * height]; // создание z-буффера
-    for (int i = 0; i < width * height; i++) {
-        zbuffer[i] = minInt; // по всему экрану задаём ему минимальнейшее значение -- фон
-    }
+    //zbuffer = new int[width * height]; // создание z-буффера
+    //for (int i = 0; i < width * height; i++) {
+    //    zbuffer[i] = minInt; // по всему экрану задаём ему минимальнейшее значение -- фон
+    //}
 
     // добавление треугольников в буфер и их закраска!!!!!!!!!
-    // fixit это говно находит что ближе, ок да, прекрасно, но оно и красит сразу же, а нафиг мне красить то, что не видно???
+    // fixit это даже не находит что ближе, ок да, прекрасно, но оно и красит сразу же, а нафиг мне красить то, что не видно???
     // а находит ли оно что ближе??? или это просто художник???7
     /*
     triangle(A, B, C, RED, zbuffer); // основание
@@ -933,17 +950,14 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
     */
 
     
-    triangle(A, B, C, RED, zbuffer); // основание
-
-   
-    
+    triangle(A, B, C, RED); // основание
 
     //triangle(A, C, D, RED, zbuffer);
     //triangle(B, C, D, RED, zbuffer);
     //triangle(A, B, D, RED, zbuffer);
 
-    triangle(E, F, G, GREEN, zbuffer); // основание
-    triangle(G, H, E, GREEN, zbuffer); // основание
+    triangle(E, F, G, GREEN); // основание
+    triangle(G, H, E, GREEN); // основание
     //triangle(E, F, I, GREEN, zbuffer);
     //triangle(F, G, I, GREEN, zbuffer);
     //triangle(G, H, I, GREEN, zbuffer);
