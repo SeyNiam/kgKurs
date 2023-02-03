@@ -962,50 +962,17 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
             zbuffer[i][j] = minInt; // по всему экрану задаём ему минимальнейшее значение -- фон
     }
 
+    triangle(A, B, C, DARK_GREEN, zbuffer); // основание
+    triangle(A, C, D, BLUE, zbuffer);
+    triangle(B, C, D, GREEN, zbuffer);
+    triangle(A, B, D, CYAN, zbuffer);
 
-    // добавление треугольников в буфер и их закраска!!!!!!!!!
-    // fixit это даже не находит что ближе, ок да, прекрасно, но оно и красит сразу же, а нафиг мне красить то, что не видно???
-    // а находит ли оно что ближе??? или это просто художник???7
-    /*
-    triangle(A, B, C, RED, zbuffer); // основание
-    triangle(A, C, D, GREEN, zbuffer);
-    triangle(B, C, D, CYAN, zbuffer);
-    triangle(A, B, D, YELLOW, zbuffer);
-       
-    triangle(E, F, G, RED, zbuffer); // основание
-    triangle(F, G, H, RED, zbuffer); // основание
-    triangle(E, F, I, GREEN, zbuffer);
-    triangle(F, G, I, CYAN, zbuffer);
-    triangle(G, H, I, YELLOW, zbuffer);
+    triangle(E, F, G, YELLOW, zbuffer); // основание
+    triangle(G, H, E, YELLOW, zbuffer); // основание
+    triangle(E, F, I, DARK_RED, zbuffer);
+    triangle(F, G, I, DARK_MAGENTA, zbuffer);
+    triangle(G, H, I, RED, zbuffer);
     triangle(H, E, I, MAGENTA, zbuffer);
-    */
-
-    
-    triangle(A, B, C, RED, zbuffer); // основание
-
-    //for (int i = 0; i < (height * width) / 2; i++) {
-    //    if (zbuffer[i] != minInt)
-    //        cout << zbuffer[i] << " ";
-    //}
-    //cout << "\noutside after ABC\n\n\n";
-
-    triangle(A, C, D, YELLOW, zbuffer);
-    triangle(B, C, D, RED, zbuffer);
-    triangle(A, B, D, YELLOW, zbuffer);
-
-    triangle(E, F, G, GREEN, zbuffer); // основание
-    triangle(G, H, E, GREEN, zbuffer); // основание
-
-    //for (int i = 0; i < (height * width) / 2; i++) {
-    //    if (zbuffer[i] != minInt)
-    //        cout << zbuffer[i] << " ";
-    //}
-    //cout << "\noutside after EFGH\n\n\n";
-
-    triangle(E, F, I, CYAN, zbuffer);
-    triangle(F, G, I, GREEN, zbuffer);
-    triangle(G, H, I, CYAN, zbuffer);
-    triangle(H, E, I, GREEN, zbuffer);
 
     // уничтожение
     for (int i = 0; i < width; i++) {
