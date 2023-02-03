@@ -849,7 +849,7 @@ void zBuff() {
 // todo разобратьс€ где что-то идЄт не так, почему оно красит художником
 
 // закраска треугольниками
-void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbuffer, bool doCol*/) {
+void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuffer/*, bool doCol*/) {
     // учЄт координаты z при отрисовке в двумерном пространстве
     // точка пересечени€ смотритс€ не пр€мо вдоль оси z, а под углом 45, как видит пользователь
     t0.x -= 0.5 * t0.z; t0.y += 0.5 * t0.z;
@@ -865,6 +865,14 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbu
 
 
     // todo fixit где-то с этого момента у чела есть объ€снение что тут происходит
+
+
+    //for (int i = 0; i < (height * width) / 2; i++) {
+    //    if (zbuffer[i] != minInt)
+    //        cout << zbuffer[i] << " ";
+    //}
+    //cout << "\ninside\n\n\n";
+
 
 
     for (int i = 0; i < total_height; i++) { // по всей высоте треугольника??????????? fixit 4real?
@@ -886,26 +894,34 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbu
             float phi = B.x == A.x ? 1.0 : (float)(j - A.x) / (float)(B.x - A.x); // 4real what
             Point P = Point(A) + Point(B - A) * phi;
 
-            int idx = P.x + P.y *width; // возможно что-то тут не так смотрим????????????
+            //int idx = P.x + P.y * width; // возможно что-то тут не так смотрим????????????
 
-            if (zbuffer[idx] < P.z /* && doCol*/) {
+            int x = P.x;
+            int y = P.y;
 
-                //cout << "zbuffer[idx] < P.z\t zbuffer[idx] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is closer" << endl;
+            if (x >= 0 && y >= 0)
+            //if (zbuffer[idx] < P.z /* && doCol*/) {
+            if (zbuffer[x][y] < P.z /* && doCol*/) {
 
-                zbuffer[idx] = P.z; // по какой-то причине оно записываетс€ в буфер, но потом его там нет, там снова минимум
+                //cout << "zbuffer[idx] < P.z\t zbuffer[" << idx << "] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is closer" << endl;
+
+                //zbuffer[idx] = P.z; // по какой-то причине оно записываетс€ в буфер, но потом его там нет, там снова минимум
+                zbuffer[x][y] = P.z; // по какой-то причине оно записываетс€ в буфер, но потом его там нет, там снова минимум
                 
                 //imgCol(P.x, P.y, P.z, colour); // с поправками уже не надо ?? fixit
                 putpixel(P.x, P.y, colour); // colour+j gives cool gradient to black
 
                 // todo fixit почему-то не видит что ближе к экрану и красит по художнику
+                // оно записывает отрицательные в буфер поверх положительных, хот€ поступает буфер, вроде, норм
 
 
                 //P.x = j; P.y = t0.y + i; // a hack to fill holes (due to int cast precision problems)
                 //imgCol(P.x, P.y, P.z, colour);
             }
-            else if (zbuffer[idx] > P.z){
-                //cout << "zbuffer[idx] > P.z\t zbuffer[idx] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is NOT closer" << endl;
-            }
+            //else if (zbuffer[idx] > P.z){
+            //    //cout << "zbuffer[idx] > P.z\t zbuffer[idx] " << zbuffer[idx] << "\t P.z" << P.z << "\t " << t0.name << t1.name << t2.name << " is NOT closer" << endl;
+            //    //cout << "\n\tzbuffer[idx] " << zbuffer[idx];
+            //}
                         
         }
     }
@@ -914,7 +930,7 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbu
     /*
     for (int i = 0; i < (height * width)/2; i++) {
         if(zbuffer[i] != minInt)
-            cout << zbuffer[i] << " "; // по всему экрану задаЄм ему минимальнейшее значение -- фон
+            cout << zbuffer[i] << " ";
     }
 
     cout << "done" << endl;
@@ -928,9 +944,24 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour/*, int* zbu
 void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {
     
     //zbuffer = new int[width * height]; // создание z-буффера
-    //for (int i = 0; i < width * height; i++) {
-    //    zbuffer[i] = minInt; // по всему экрану задаЄм ему минимальнейшее значение -- фон
-    //}
+
+    //int* zbuffer = NULL;
+    //zbuffer = new int[width * height]; // создание z-буффера
+    
+    const int width = 1400;
+    const int height = 700;
+
+    int** zbuffer;
+    zbuffer = new int* [width];
+    for (int i = 0; i < width; i++) {
+        zbuffer[i] = new int[height];     // инициализаци€ указателей
+    }
+
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++)
+            zbuffer[i][j] = minInt; // по всему экрану задаЄм ему минимальнейшее значение -- фон
+    }
+
 
     // добавление треугольников в буфер и их закраска!!!!!!!!!
     // fixit это даже не находит что ближе, ок да, прекрасно, но оно и красит сразу же, а нафиг мне красить то, что не видно???
@@ -950,20 +981,37 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
     */
 
     
-    triangle(A, B, C, RED); // основание
+    triangle(A, B, C, RED, zbuffer); // основание
 
-    //triangle(A, C, D, RED, zbuffer);
-    //triangle(B, C, D, RED, zbuffer);
-    //triangle(A, B, D, RED, zbuffer);
+    //for (int i = 0; i < (height * width) / 2; i++) {
+    //    if (zbuffer[i] != minInt)
+    //        cout << zbuffer[i] << " ";
+    //}
+    //cout << "\noutside after ABC\n\n\n";
 
-    triangle(E, F, G, GREEN); // основание
-    triangle(G, H, E, GREEN); // основание
-    //triangle(E, F, I, GREEN, zbuffer);
-    //triangle(F, G, I, GREEN, zbuffer);
-    //triangle(G, H, I, GREEN, zbuffer);
-    //triangle(H, E, I, GREEN, zbuffer);
+    triangle(A, C, D, YELLOW, zbuffer);
+    triangle(B, C, D, RED, zbuffer);
+    triangle(A, B, D, YELLOW, zbuffer);
 
+    triangle(E, F, G, GREEN, zbuffer); // основание
+    triangle(G, H, E, GREEN, zbuffer); // основание
 
+    //for (int i = 0; i < (height * width) / 2; i++) {
+    //    if (zbuffer[i] != minInt)
+    //        cout << zbuffer[i] << " ";
+    //}
+    //cout << "\noutside after EFGH\n\n\n";
+
+    triangle(E, F, I, CYAN, zbuffer);
+    triangle(F, G, I, GREEN, zbuffer);
+    triangle(G, H, I, CYAN, zbuffer);
+    triangle(H, E, I, GREEN, zbuffer);
+
+    // уничтожение
+    for (int i = 0; i < width; i++) {
+        delete[] zbuffer[i];
+    }
+    delete[] zbuffer;
 
     /*
     triangle(A, B, C, RED, zbuffer, false); // основание
