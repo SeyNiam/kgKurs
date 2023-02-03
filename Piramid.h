@@ -65,52 +65,16 @@ public:
     Point dotScale(float e, Point Cen, Point L);
     // масштабирование всей фигуры
     void scale(float e);
-
-    /*
-    Point dot;  // точка пересечения
-    // проверка на пересечение линий
-    bool cross(Point a1, Point a2, Point a3, Point a4);
-
-    // видимость пересекающихся линий
-    int seenL(Point One, Point Two, Point Three, Point Four);
-
-    // видимость поверхностей, если линии не пересекаются
-    void seenS(Point a1, Point a2, Point a3, Point a4);
-
-    // заливка одной поверхности
-    void fill(Point p1, Point p2, Point p3, COLORREF col);
-*/
-    // закраска всех видимых поверхностей
-    //void colouring();
-
-
-
-    //float MAXDIST = 1000.0; //Максимальная глубина сцены
-    //float MAXYLINES = 200; //Максимальное количество линий в сцене.
-    //float clBk = 3; //Цвет по умолчанию
-
-    //typedef struct Cell CELL; //Структура ячейки, из которых будет состоять Z-буфер.
-    
-
+     
+    // размеры окна и минимальное значения дальности пикселя
     const int width = 1400;
     const int height = 700;
-    const int depth = 255;
-
     int minInt = -32767;
 
-    //int* zbuffer = NULL;
-    //zbuffer = new int[width * height]; // создание z-буффера
-    //int* zbuffer = new int[width * height]; // создание z-буффера
-
-    // закраска пиксела fixit no need????
-    void imgCol(int Px, int Py, int Pz, COLORREF colour);
-
     // закраска треугольника
-    void triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuffer/*, bool doCol*/);
+    void triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuffer);
 
     // z-buffer
     void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine);
-
-
 };
 
