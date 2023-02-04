@@ -76,5 +76,11 @@ public:
 
     // z-buffer
     void zBuff(Point One, Point Two, Point Three, Point Four, Point Five, Point Six, Point Seven, Point Eight, Point Nine);
+
+
+
+    Point shadowPoint(Point P);
+
+    void shadowTri(Point A, Point B, Point C);
 };
 

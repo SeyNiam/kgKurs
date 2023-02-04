@@ -159,8 +159,12 @@ void Piramid::drawPiramid() {
     line_DDA(I.x, I.y, I.z, H.x, H.y, H.z, col); // лини€ 8
 
 
+    //shadow(A);
+    setcolor(WHITE);
+    shadowTri(A, B, C);
+
     // закраска граней фигуры
-    zBuff(A, B, C, D, E, F, G, H, I);
+    //zBuff(A, B, C, D, E, F, G, H, I);
 }
 
 // пермещение
@@ -391,13 +395,20 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuf
             if (x >= 0 && y >= 0) {
                 if (zbuffer[x][y] < P.z) {
                     zbuffer[x][y] = P.z; // глубина ближайшего к экрану пиксел€ записываетс€ в буфер
-                    putpixel(P.x, P.y, colour); // colour+j gives cool gradient to black
+                    putpixel(P.x, P.y, colour); // colour+j даст крутой градиент к чЄрному
+
+                    // todo починить дырки, по€вл€ющиес€ иногда (почему?)
+                    // 
+                    //P.x = j; P.y = t0.y + i; // a hack to fill holes (due to int cast precision problems)
+                    //putpixel(P.x, P.y, colour);
+                    //putpixel(j, t0.y + i, colour); // attention, due to int casts t0.y+i != A.y
                 }
             }                     
         }
     }
 }
 
+// использование алгоритма z-буффера дл€ отсечени€ невидимых поверхностей и закраски видимых
 void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {
     // создание z-буффера
     int** zbuffer;
@@ -430,4 +441,44 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
         delete[] zbuffer[i];
     }
     delete[] zbuffer;
+}
+
+
+
+Point Piramid::shadowPoint(Point P) {
+    Point L(100, 100, 100); // точка источника света
+
+    int floor = 350; // условный пол
+    Point S(0, 0, 0); // точка полученной проекции
+
+    float alpha = (-P.z) / (P.z - L.z);
+
+    S = P + alpha * (P - L);
+    //S.z = P.z + alpha * (P.z - L.z);
+
+    S.x = (L.x * P.z - P.x * L.z) / (P.z - L.z);
+    //S.y = (L.y * P.z - P.y * L.z) / (P.z - L.z);
+
+    S.y += floor;
+
+    cout << "S.x " << S.x << " S.y " << S.y << " S.z " << S.z << endl;
+
+    // учЄт координаты z при отрисовке в двумерном пространстве
+    // точка пересечени€ смотритс€ не пр€мо вдоль оси z, а под углом 45, как видит пользователь
+    S.x -= 0.5 * S.z; S.y += 0.5 * S.z;
+
+    //putpixel(S.x, S.y, WHITE);
+
+    return S;
+}
+
+void Piramid::shadowTri(Point A, Point B, Point C) {
+    Point p1, p2, p3;
+    p1 = shadowPoint(A);
+    p2 = shadowPoint(B);
+    p3 = shadowPoint(C);
+
+    line(p1.x, p1.y, p2.x, p2.y);
+    line(p2.x, p2.y, p3.x, p3.y);
+    line(p1.x, p1.y, p3.x, p3.y);
 }
