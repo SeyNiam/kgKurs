@@ -55,3 +55,8 @@ Point operator * (Point p1, float a) {
     p3.z = p1.z * a;
     return p3;
 }
+Point operator * (float a, Point p1) {
+    Point p3;
+    p3 = p1 * a;
+    return p3;
+}

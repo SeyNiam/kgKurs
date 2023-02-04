@@ -19,3 +19,4 @@ Point operator - (Point p1, Point p2);
 Point operator + (Point p1, Point p2);
 Point operator * (Point p1, Point p2);
 Point operator * (Point p1, float a);
+Point operator * (float a, Point p1);
