@@ -15,6 +15,7 @@ public:
 
 };
 
+// перегрузки операторов
 Point operator - (Point p1, Point p2);
 Point operator + (Point p1, Point p2);
 Point operator * (Point p1, Point p2);

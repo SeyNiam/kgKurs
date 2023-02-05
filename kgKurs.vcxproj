@@ -142,14 +142,12 @@
     <ClCompile Include="kgKurs.cpp" />
     <ClCompile Include="Piramid.cpp" />
     <ClCompile Include="Point.cpp" />
-    <ClCompile Include="Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colours.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="Piramid.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Surface.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="graphics.lib" />

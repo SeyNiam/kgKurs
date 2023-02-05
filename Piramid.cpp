@@ -5,7 +5,6 @@
 #pragma comment(lib,"graphics.lib")
 
 #include "Point.h"
-#include "Surface.h"
 #include "Piramid.h"
 #include "Colours.h"
 
@@ -159,9 +158,8 @@ void Piramid::drawPiramid() {
     line_DDA(I.x, I.y, I.z, H.x, H.y, H.z, col); // линия 8
 
 
-    //shadow(A);
+    // построение теней
     setcolor(WHITE);
-    //shadowTri(A, B, C);
     shadowAll(A, B, C, D, E, F, G, H, I);
 
     // закраска граней фигуры
@@ -373,7 +371,7 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuf
     if (t1.y > t2.y) std::swap(t1, t2);
     int total_height = t2.y - t0.y; // высота закрашиваемого треугольника
 
-    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника??????????? fixit 4real?
+    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника
         bool second_half = i > t1.y - t0.y || t1.y == t0.y; // true или false в зависимости от того 
                                                             // больше ли i , чем расстояние между 1 и 0 точками или
                                                             // они совпали
@@ -415,7 +413,7 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
     int** zbuffer;
     zbuffer = new int* [width];
     for (int i = 0; i < width; i++) {
-        zbuffer[i] = new int[height];     // инициализация указателей
+        zbuffer[i] = new int[height]; // инициализация указателей
     }
 
     for (int i = 0; i < width; i++) {
