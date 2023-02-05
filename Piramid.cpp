@@ -395,12 +395,6 @@ void Piramid::triangle(Point t0, Point t1, Point t2, COLORREF colour, int** zbuf
                 if (zbuffer[x][y] < P.z) {
                     zbuffer[x][y] = P.z; // глубина ближайшего к экрану пиксел€ записываетс€ в буфер
                     putpixel(P.x, P.y, colour); // colour+j даст крутой градиент к чЄрному
-
-                    // todo починить дырки, по€вл€ющиес€ иногда (почему?)
-                    // 
-                    //P.x = j; P.y = t0.y + i; // a hack to fill holes (due to int cast precision problems)
-                    //putpixel(P.x, P.y, colour);
-                    //putpixel(j, t0.y + i, colour); // attention, due to int casts t0.y+i != A.y
                 }
             }                     
         }
