@@ -477,11 +477,7 @@ void Piramid::shadowTri(Point A, Point B, Point C) {
     p2 = shadowPoint(B);
     p3 = shadowPoint(C);
 
-    //line(p1.x, p1.y, p2.x, p2.y);
-    //line(p2.x, p2.y, p3.x, p3.y);
-    //line(p1.x, p1.y, p3.x, p3.y);
-
-    shadowTriColour(p1, p2, p3, WHITE);
+    shadowTriColour(p1, p2, p3, GRAY);
 }
 
 void Piramid::shadowAll(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {

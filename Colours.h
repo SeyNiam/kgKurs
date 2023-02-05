@@ -3,6 +3,7 @@
 #define TEXTCOL 13 // маджента
 #define MAINCOL 13 
 #define WHITE 15
+#define GRAY 8
 #define BLACK 0
 
 #define DARK_GREEN 2
