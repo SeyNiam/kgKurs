@@ -446,28 +446,24 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
 
 
 Point Piramid::shadowPoint(Point P) {
-    Point L(100, 100, 100); // точка источника света
+    Point L(700, 20, 0); // точка источника света
+    putpixel(L.x, L.y, WHITE);
+    putpixel(L.x+1, L.y, WHITE);
+    putpixel(L.x-1, L.y, WHITE);
+    putpixel(L.x, L.y+1, WHITE);
+    putpixel(L.x, L.y-1, WHITE);
 
     int floor = 350; // условный пол
     Point S(0, 0, 0); // точка полученной проекции
 
-    float alpha = (-P.z) / (P.z - L.z);
-
-    S = P + alpha * (P - L);
-    //S.z = P.z + alpha * (P.z - L.z);
-
-    S.x = (L.x * P.z - P.x * L.z) / (P.z - L.z);
-    //S.y = (L.y * P.z - P.y * L.z) / (P.z - L.z);
-
-    S.y += floor;
-
-    cout << "S.x " << S.x << " S.y " << S.y << " S.z " << S.z << endl;
+    int k = (floor - P.y) / (L.y - P.y);
+    S.x = (L.x - P.x) * k + P.x;
+    S.y = floor;
+    S.z = (L.z - P.z) * k + P.z;
 
     // учёт координаты z при отрисовке в двумерном пространстве
     // точка пересечения смотрится не прямо вдоль оси z, а под углом 45, как видит пользователь
     S.x -= 0.5 * S.z; S.y += 0.5 * S.z;
-
-    //putpixel(S.x, S.y, WHITE);
 
     return S;
 }
