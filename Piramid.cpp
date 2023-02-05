@@ -445,16 +445,9 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
 }
 
 
-
-
-
+// построение проекции точки на условный пол для тени
 Point Piramid::shadowPoint(Point P) {
     Point L(700, 20, 0); // точка источника света
-    putpixel(L.x, L.y, WHITE);
-    putpixel(L.x+1, L.y, WHITE);
-    putpixel(L.x-1, L.y, WHITE);
-    putpixel(L.x, L.y+1, WHITE);
-    putpixel(L.x, L.y-1, WHITE);
 
     int floor = 350; // условный пол
     Point S(0, 0, 0); // точка полученной проекции
@@ -471,16 +464,29 @@ Point Piramid::shadowPoint(Point P) {
     return S;
 }
 
+// построение тени для треугольника
 void Piramid::shadowTri(Point A, Point B, Point C) {
     Point p1, p2, p3;
-    p1 = shadowPoint(A);
-    p2 = shadowPoint(B);
-    p3 = shadowPoint(C);
-
-    shadowTriColour(p1, p2, p3, GRAY);
+    int floor = 350; // условный пол
+    // условие для отображения тени только ниже фигуры
+    if (A.y <= floor && B.y <= floor && C.y <= floor) { 
+        p1 = shadowPoint(A);
+        p2 = shadowPoint(B);
+        p3 = shadowPoint(C);
+        shadowTriColour(p1, p2, p3, GRAY);
+    }
 }
 
+// построение теней для всех фигур
 void Piramid::shadowAll(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {
+    Point L(700, 20, 0); // точка источника света
+    int lightWidth = 4;
+    for (int i = L.x- lightWidth; i <= L.x+ lightWidth; i++) {
+        for (int j = L.y - lightWidth; j <= L.y + lightWidth; j++) {
+            putpixel(i, j, WHITE);
+        }
+    }
+
     shadowTri(A, B, C);
     shadowTri(A, B, D);
     shadowTri(C, B, D);
@@ -494,6 +500,7 @@ void Piramid::shadowAll(Point A, Point B, Point C, Point D, Point E, Point F, Po
     shadowTri(H, E, I);
 }
 
+// закраска тени треугольниками
 void Piramid::shadowTriColour(Point t0, Point t1, Point t2, COLORREF colour) {
     // сортировка точек по координате у
     if (t0.y == t1.y && t0.y == t2.y) return; // если все точки совпали по у, возврат
@@ -502,7 +509,7 @@ void Piramid::shadowTriColour(Point t0, Point t1, Point t2, COLORREF colour) {
     if (t1.y > t2.y) std::swap(t1, t2);
     int total_height = t2.y - t0.y; // высота закрашиваемого треугольника
 
-    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника??????????? fixit 4real?
+    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника
         bool second_half = i > t1.y - t0.y || t1.y == t0.y; // true или false в зависимости от того 
                                                             // больше ли i , чем расстояние между 1 и 0 точками или
                                                             // они совпали
