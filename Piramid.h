@@ -82,5 +82,9 @@ public:
     Point shadowPoint(Point P);
 
     void shadowTri(Point A, Point B, Point C);
+
+    void shadowAll(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I);
+
+    void shadowTriColour(Point t0, Point t1, Point t2, COLORREF colour);
 };
 

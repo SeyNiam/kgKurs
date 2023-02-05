@@ -161,10 +161,11 @@ void Piramid::drawPiramid() {
 
     //shadow(A);
     setcolor(WHITE);
-    shadowTri(A, B, C);
+    //shadowTri(A, B, C);
+    shadowAll(A, B, C, D, E, F, G, H, I);
 
     // закраска граней фигуры
-    //zBuff(A, B, C, D, E, F, G, H, I);
+    zBuff(A, B, C, D, E, F, G, H, I);
 }
 
 // пермещение
@@ -445,6 +446,8 @@ void Piramid::zBuff(Point A, Point B, Point C, Point D, Point E, Point F, Point 
 
 
 
+
+
 Point Piramid::shadowPoint(Point P) {
     Point L(700, 20, 0); // точка источника света
     putpixel(L.x, L.y, WHITE);
@@ -474,7 +477,58 @@ void Piramid::shadowTri(Point A, Point B, Point C) {
     p2 = shadowPoint(B);
     p3 = shadowPoint(C);
 
-    line(p1.x, p1.y, p2.x, p2.y);
-    line(p2.x, p2.y, p3.x, p3.y);
-    line(p1.x, p1.y, p3.x, p3.y);
+    //line(p1.x, p1.y, p2.x, p2.y);
+    //line(p2.x, p2.y, p3.x, p3.y);
+    //line(p1.x, p1.y, p3.x, p3.y);
+
+    shadowTriColour(p1, p2, p3, WHITE);
+}
+
+void Piramid::shadowAll(Point A, Point B, Point C, Point D, Point E, Point F, Point G, Point H, Point I) {
+    shadowTri(A, B, C);
+    shadowTri(A, B, D);
+    shadowTri(C, B, D);
+    shadowTri(A, C, D);
+
+    shadowTri(E, F, G);
+    shadowTri(E, H, G);
+    shadowTri(E, F, I);
+    shadowTri(F, G, I);
+    shadowTri(G, H, I);
+    shadowTri(H, E, I);
+}
+
+void Piramid::shadowTriColour(Point t0, Point t1, Point t2, COLORREF colour) {
+    // сортировка точек по координате у
+    if (t0.y == t1.y && t0.y == t2.y) return; // если все точки совпали по у, возврат
+    if (t0.y > t1.y) std::swap(t0, t1);
+    if (t0.y > t2.y) std::swap(t0, t2);
+    if (t1.y > t2.y) std::swap(t1, t2);
+    int total_height = t2.y - t0.y; // высота закрашиваемого треугольника
+
+    for (int i = 0; i < total_height; i++) { // по всей высоте треугольника??????????? fixit 4real?
+        bool second_half = i > t1.y - t0.y || t1.y == t0.y; // true или false в зависимости от того 
+                                                            // больше ли i , чем расстояние между 1 и 0 точками или
+                                                            // они совпали
+        int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y; // если i больше, чем расстояние между 1 и 0 точками, то
+                                                            // оно равно расстоянию между 2 и 1 точками, иначе
+                                                            // между 1 и 0 точками
+        float alpha = (float)i / total_height;
+        float beta = (float)(i - (second_half ? t1.y - t0.y : 0)) / segment_height;
+
+        Point A = t0 + Point(t2 - t0) * alpha;
+        Point B = second_half ? t1 + Point(t2 - t1) * beta : t0 + Point(t1 - t0) * beta;
+
+        if (A.x > B.x) std::swap(A, B); // сортировка точек по координате х
+
+        for (int j = A.x; j <= B.x; j++) { // проход по строке с коорд х от а до б
+            float phi = B.x == A.x ? 1.0 : (float)(j - A.x) / (float)(B.x - A.x);
+            Point P = Point(A) + Point(B - A) * phi;
+            int x = P.x;
+            int y = P.y;
+            if (x >= 0 && y >= 0) {
+                putpixel(P.x, P.y, colour);
+            }
+        }
+    }
 }
